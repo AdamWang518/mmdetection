@@ -41,16 +41,17 @@ train_pipeline = [
             [
                 dict(
                     type='RandomChoiceResize',
-                    scales=[(480, 2048), (512, 2048), (544, 2048), (576, 2048),
-                            (608, 2048), (640, 2048), (672, 2048), (704, 2048),
-                            (736, 2048), (768, 2048), (800, 2048), (832, 2048),
-                            (864, 2048), (896, 2048), (928, 2048), (960, 2048),
-                            (992, 2048), (1024, 2048), (1056, 2048),
-                            (1088, 2048), (1120, 2048), (1152, 2048),
-                            (1184, 2048), (1216, 2048), (1248, 2048),
-                            (1280, 2048), (1312, 2048), (1344, 2048),
-                            (1376, 2048), (1408, 2048), (1440, 2048),
-                            (1472, 2048), (1504, 2048), (1536, 2048)],
+                    # scales=[(480, 2048), (512, 2048), (544, 2048), (576, 2048),
+                    #         (608, 2048), (640, 2048), (672, 2048), (704, 2048),
+                    #         (736, 2048), (768, 2048), (800, 2048), (832, 2048),
+                    #         (864, 2048), (896, 2048), (928, 2048), (960, 2048),
+                    #         (992, 2048), (1024, 2048), (1056, 2048),
+                    #         (1088, 2048), (1120, 2048), (1152, 2048),
+                    #         (1184, 2048), (1216, 2048), (1248, 2048),
+                    #         (1280, 2048), (1312, 2048), (1344, 2048),
+                    #         (1376, 2048), (1408, 2048), (1440, 2048),
+                    #         (1472, 2048), (1504, 2048), (1536, 2048)],
+                    scales=[(320, 320), (480, 480), (640, 640)],  # 根據實際圖像大小設置
                     keep_ratio=True)
             ],
             [
@@ -58,7 +59,8 @@ train_pipeline = [
                     type='RandomChoiceResize',
                     # The radio of all image in train dataset < 7
                     # follow the original implement
-                    scales=[(400, 4200), (500, 4200), (600, 4200)],
+                    # scales=[(400, 4200), (500, 4200), (600, 4200)],
+                    scales=[(320, 320), (480, 480), (640, 640)],  # 根據實際圖像大小設置
                     keep_ratio=True),
                 dict(
                     type='RandomCrop',
@@ -67,28 +69,30 @@ train_pipeline = [
                     allow_negative_crop=True),
                 dict(
                     type='RandomChoiceResize',
-                    scales=[(480, 2048), (512, 2048), (544, 2048), (576, 2048),
-                            (608, 2048), (640, 2048), (672, 2048), (704, 2048),
-                            (736, 2048), (768, 2048), (800, 2048), (832, 2048),
-                            (864, 2048), (896, 2048), (928, 2048), (960, 2048),
-                            (992, 2048), (1024, 2048), (1056, 2048),
-                            (1088, 2048), (1120, 2048), (1152, 2048),
-                            (1184, 2048), (1216, 2048), (1248, 2048),
-                            (1280, 2048), (1312, 2048), (1344, 2048),
-                            (1376, 2048), (1408, 2048), (1440, 2048),
-                            (1472, 2048), (1504, 2048), (1536, 2048)],
+                    # scales=[(480, 2048), (512, 2048), (544, 2048), (576, 2048),
+                    #         (608, 2048), (640, 2048), (672, 2048), (704, 2048),
+                    #         (736, 2048), (768, 2048), (800, 2048), (832, 2048),
+                    #         (864, 2048), (896, 2048), (928, 2048), (960, 2048),
+                    #         (992, 2048), (1024, 2048), (1056, 2048),
+                    #         (1088, 2048), (1120, 2048), (1152, 2048),
+                    #         (1184, 2048), (1216, 2048), (1248, 2048),
+                    #         (1280, 2048), (1312, 2048), (1344, 2048),
+                    #         (1376, 2048), (1408, 2048), (1440, 2048),
+                    #         (1472, 2048), (1504, 2048), (1536, 2048)],
+                    scales=[(320, 320), (480, 480), (640, 640)],  # 根據實際圖像大小設置
                     keep_ratio=True)
             ]
         ]),
     dict(type='PackDetInputs')
 ]
 
-train_dataloader = dict(
-    batch_size=1, num_workers=1, dataset=dict(pipeline=train_pipeline))
+# train_dataloader = dict(
+    # batch_size=1, num_workers=1, dataset=dict(pipeline=train_pipeline))
 
 test_pipeline = [
     dict(type='LoadImageFromFile'),
-    dict(type='Resize', scale=(2048, 1280), keep_ratio=True),
+    # dict(type='Resize', scale=(2048, 1280), keep_ratio=True),
+    dict(type='Resize', scale=(640, 640), keep_ratio=True),
     dict(type='LoadAnnotations', with_bbox=True),
     dict(
         type='PackDetInputs',
@@ -96,8 +100,63 @@ test_pipeline = [
                    'scale_factor'))
 ]
 
-val_dataloader = dict(dataset=dict(pipeline=test_pipeline))
-test_dataloader = val_dataloader
+# val_dataloader = dict(dataset=dict(pipeline=test_pipeline))
+# test_dataloader = val_dataloader
+train_dataloader = dict(
+    batch_size=1,
+    dataset=dict(
+        type='CocoDataset',
+        ann_file='D:/Github/RandomPick_v6_COCO/annotations/train_coco.json',
+        data_prefix=dict(img='images/train/'),
+        data_root='D:/Github/RandomPick_v6_COCO/',
+        pipeline=train_pipeline,
+    ),
+    num_workers=1,
+    persistent_workers=True,
+    sampler=dict(type='DefaultSampler', shuffle=True),
+)
+
+val_dataloader = dict(
+    batch_size=1,
+    dataset=dict(
+        type='CocoDataset',
+        ann_file='D:/Github/RandomPick_v6_COCO/annotations/val_coco.json',
+        data_prefix=dict(img='images/val/'),
+        data_root='D:/Github/RandomPick_v6_COCO/',
+        pipeline=test_pipeline,
+        test_mode=True,
+    ),
+    num_workers=1,
+    persistent_workers=True,
+    sampler=dict(type='DefaultSampler', shuffle=False),
+)
+
+test_dataloader = dict(
+    batch_size=1,
+    dataset=dict(
+        type='CocoDataset',
+        ann_file='D:/Github/RandomPick_v6_COCO/annotations/test_coco.json',
+        data_prefix=dict(img='images/test/'),
+        data_root='D:/Github/RandomPick_v6_COCO/',
+        pipeline=test_pipeline,
+        test_mode=True,
+    ),
+    num_workers=1,
+    persistent_workers=True,
+    sampler=dict(type='DefaultSampler', shuffle=False),
+)
+
+val_evaluator = dict(
+    type='CocoMetric',
+    ann_file='D:/Github/RandomPick_v6_COCO/annotations/val_coco.json',
+    metric='bbox'
+)
+
+test_evaluator = dict(
+    type='CocoMetric',
+    ann_file='D:/Github/RandomPick_v6_COCO/annotations/test_coco.json',
+    metric='bbox'
+)
 
 optim_wrapper = dict(optimizer=dict(lr=1e-4))
 

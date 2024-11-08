@@ -99,14 +99,14 @@ test_pipeline = [
         meta_keys=('img_id', 'img_path', 'ori_shape', 'img_shape',
                    'scale_factor'))
 ]
-
+ann_file_path="D:/Github/RandomPick_v6_COCO/annotations/"
 # val_dataloader = dict(dataset=dict(pipeline=test_pipeline))
 # test_dataloader = val_dataloader
 train_dataloader = dict(
     batch_size=1,
     dataset=dict(
         type='CocoDataset',
-        ann_file='D:/Github/RandomPick_v6_COCO/annotations/train_coco.json',
+        ann_file=ann_file_path+'train_coco.json',
         data_prefix=dict(img='images/train/'),
         data_root='D:/Github/RandomPick_v6_COCO/',
         pipeline=train_pipeline,
@@ -120,7 +120,7 @@ val_dataloader = dict(
     batch_size=1,
     dataset=dict(
         type='CocoDataset',
-        ann_file='D:/Github/RandomPick_v6_COCO/annotations/val_coco.json',
+        ann_file=ann_file_path+'val_coco.json',
         data_prefix=dict(img='images/val/'),
         data_root='D:/Github/RandomPick_v6_COCO/',
         pipeline=test_pipeline,
@@ -135,7 +135,7 @@ test_dataloader = dict(
     batch_size=1,
     dataset=dict(
         type='CocoDataset',
-        ann_file='D:/Github/RandomPick_v6_COCO/annotations/test_coco.json',
+        ann_file=ann_file_path+'test_coco.json',
         data_prefix=dict(img='images/test/'),
         data_root='D:/Github/RandomPick_v6_COCO/',
         pipeline=test_pipeline,
@@ -148,13 +148,13 @@ test_dataloader = dict(
 
 val_evaluator = dict(
     type='CocoMetric',
-    ann_file='D:/Github/RandomPick_v6_COCO/annotations/val_coco.json',
+    ann_file=ann_file_path+'val_coco.json',
     metric='bbox'
 )
 
 test_evaluator = dict(
     type='CocoMetric',
-    ann_file='D:/Github/RandomPick_v6_COCO/annotations/test_coco.json',
+    ann_file=ann_file_path+'test_coco.json',
     metric='bbox'
 )
 

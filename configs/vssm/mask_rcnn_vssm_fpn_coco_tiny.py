@@ -1,7 +1,7 @@
 _base_ = [
     '../swin/mask-rcnn_swin-t-p4-w7_fpn_1x_coco.py'
 ]
-from mmdet.models.backbones.vmamba import MM_VSSM
+import mmdet.models.backbones.vmamba
 model = dict(
     backbone=dict(
         type='MM_VSSM',

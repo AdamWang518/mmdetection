@@ -6,8 +6,8 @@ from functools import partial
 from typing import Optional, Callable, Any
 from collections import OrderedDict
 from mmengine.model import BaseModule
-from mmdet.registry import MODELS as MODELS_MMDET
-from mmseg.registry import MODELS as MODELS_MMSEG
+
+from mmdet.registry import MODELS
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -1851,9 +1851,9 @@ if __name__ == "__main__":
     breakpoint()
 
 
-# 創建 MM_VSSM 並註冊
-@MODELS_MMSEG.register_module()
-@MODELS_MMDET.register_module()
+# # 創建 MM_VSSM 並註冊
+
+@MODELS.register_module()
 class MM_VSSM(BaseModule, Backbone_VSSM):
     def __init__(self, *args, **kwargs):
         BaseModule.__init__(self)

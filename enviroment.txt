@@ -10,7 +10,7 @@ pip install -U openmim
 mim install mmengine
 pip install mmcv==2.1.0 -f https://download.openmmlab.com/mmcv/dist/cu121/torch2.1/index.html
 mim install mmdet
-apt update
+apt update 
 apt install -y libgl1
 apt update
 apt install -y libglib2.0-0
